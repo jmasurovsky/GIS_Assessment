@@ -1,0 +1,159 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+#Read in CSV Files
+UrbanSlumsPop <- read.csv("~/Desktop/Urban_Slums_Pop.csv", header = TRUE, sep = ",")
+names(UrbanSlumsPop)[names(UrbanSlumsPop)=="Population.living.in.slums....of.urban.population.....of.urban.population."] <- "PercentUrbanPopInSlums"
+MegacitiesCSV <- read.csv("~/Desktop/MegaCities_2035_Data.csv", header = TRUE, sep = ",")
+
+#Read in Shapefiles
+install.packages(c("classInt", "OpenStreetMap"))
+install.packages(c("RColorBrewer", "sp", "rgeos", "tmap", "tmaptools", "sf", "downloader", "rgdal", "geojsonio"))
+install.packages("plotly")
+install.packages("maptools")
+install.packages("tmap")
+install.packages("ggmap")
+library(tidyverse)
+library(plotly)
+library(maptools)
+library(RColorBrewer)
+library(classInt)
+library(OpenStreetMap)
+library(sp)
+library(rgeos)
+library(tmap)
+library(tmaptools)
+library(sf)
+library(rgdal)
+library(rJava)
+library(geojsonio)
+library(methods)
+library(ggplot2)
+
+#WorldCountriesMap <- read_shape("~/Desktop/WorldCountries.shp", as.sf = TRUE)
+#qtm(WorldCountriesMap)
+#MegacitiesMap <- read_shape("~/Desktop/Megacities.shp", as.sf = TRUE)
+#qtm(MegacitiesMap)
+#UrbanSlumsCountriesData <- read_shape("~/Desktop/WorldCountriesSHP.shp", as.sf = TRUE)
+#class(MegacitiesMap)
+#class(WorldCountriesMap)
+
+# Join UrbanSlumsPop w/ WorldCountries
+#*Error*WorldCountriesMap@data <- data.frame(WorldCountriesMap@data,UrbanSlumsPop[match(WorldCountriesMap@data[,"GMI_CNTRY"],UrbanSlumsPop[,"Code"]),])
+#*Crashed* WorldCountriesMapData <- append_data(WorldCountriesMap,UrbanSlumsPop, key.shp = "GMI_CNTRY", key.data = "Code", ignore.duplicates = TRUE)
+WorldCountriesMapData <- WorldCountriesMap %>% left_join(UrbanSlumsPop, by = c("GMI_CNTRY" = "Code" ))
+library(tmap)
+library(tmaptools)
+tmap_mode("plot")
+qtm(WorldCountriesMapData, fill = "PercentUrbanPopInSlums")
+library(jsonlite)
+install.packages('spDataLarge', repos='https://nowosad.github.io/drat/', type='source')
+library(raster)
+AsiaPopSpread <- raster("~/Desktop/Rasters/Asia_2020_Pop.tif")
+AFRPopSpread2 <- raster("~/Desktop/Rasters/AFR_2020_Pop2.tif")
+#ggplot() + geom_tile(data=AFRPopSpread2, aes(x = x, y = y, fill = layer) + scale_fill_distiller(palette = "Greens", na.value = "transparent"))
+#qtm(AFRPopSpread2)
+#library(tmap)
+#tm_shape(AFRPopSpread) +
+#  tm_raster()
+
+#AFRPopSpread2.spdf <- as(AFRPopSpread2, "SpatialPixelsDataFrame")
+#AFRPopSpread2.df <- as.data.frame(AFRPopSpread2.spdf)
+
+#ggplot mapping
+#ggplot()+geom_sf(mapping = aes(geometry=geometry),data = WorldCountriesMapData)
+#ggplot()+geom_sf(mapping = aes(geometry=geometry),data = WorldCountriesMapData)+theme_minimal()
+#ggplot()+geom_sf(mapping = aes(geometry=geometry, fill = PercentUrbanPopInSlums),data = WorldCountriesMapData)+theme_minimal()
+palettel <- scale_fill_continuous(low="yellow", high="red", "% living in slums")
+MapData <- ggplot()+geom_sf(mapping = aes(geometry=geometry, fill = PercentUrbanPopInSlums),data = WorldCountriesMapData)+theme_minimal()+palettel
+#MegacitiesxSlumPopMap <- ggmap(MapData) +
+#  geom_point(aes(x = lon, y = lat), data = MegacitiesMap)
+#Checkpoint
+ggplot()+geom_sf(mapping = aes(geometry=geometry, fill = PercentUrbanPopInSlums),data = WorldCountriesMapData)+theme_minimal()+palettel +
+  geom_point(aes(x = Longitude, y = Latitude), data = MegacitiesMap, alpha = .4)
+
+mymap <- ggplot()+geom_sf(mapping = aes(geometry=geometry, fill = PercentUrbanPopInSlums),data = WorldCountriesMapData)+theme_minimal()+palettel +
+  geom_point(aes(x = Longitude, y = Latitude), data = MegacitiesMap, alpha = .4)
+#MapPointsLegend <- mymap+
+#  scale_size_area(breaks = sqrt(c(10,13,17,20,22,26,30,33,37,40,45,50)), labels = c(10,13,17,20,22,26,30,33,37,40,45,50), name = "2035 Megacity Size")
+#mymap <- MapPointsLegend
+mymap                    
+#ggplot(mymap)+geom_sf(mapping = aes(geometry=geometry)
+#MapData
+install.packages("png")
+
+#ggplot()+geom_sf(mapping = aes(geometry=geometry, fill = PercentUrbanPopInSlums),data = WorldCountriesMapData)+theme_minimal()+palettel +
+#  geom_point(aes(x = Longitude, y = Latitude), data = MegacitiesMap) +
+#  scale_x_continuous(limits = c(77, 122))+
+#  scale_y_continuous(limits = c(4, 13))
+
+
+
+#leaflet
+library(leaflet)
+library(classInt)
+library(sf)
+library(sp)
+library(magrittr)
+library(reshape2)
+library(dplyr)
+library(shinyjs)
+install.packages("ggmap")
+library(ggmap)
+
+breaks<-classIntervals(WorldCountriesMapData$PercentUrbanPopInSlums, n=9, style="jenks")
+breaks <- breaks$brks
+pal <- colorBin(palette = "YlOrRd", 
+                domain = WorldCountriesMapData$PercentUrbanPopInSlums, bins = breaks)
+#addRasterImage(AFRPopSpread, opacity = 0.6) %>%
+
+leaflet(WorldCountriesMapData) %>%
+  addPolygons(stroke = FALSE, 
+              fillOpacity = 0.5, 
+              smoothFactor = 0.5,
+              fillColor = ~pal(WorldCountriesMapData$PercentUrbanPopInSlums),
+              popup = paste("Region:", WorldCountriesMapData$NAME, "<br>",
+                            "", WorldCountriesMapData$PercentUrbanPopInSlums)
+  ) %>%
+  addProviderTiles("CartoDB.DarkMatter") %>%
+  addLegend("bottomright", 
+            pal= pal, 
+            values = ~PercentUrbanPopInSlums, 
+            title = "2035 Megacities & Percent of urban pop living in slums", 
+            labFormat = labelFormat(prefix = "Threshold: "),
+            opacity = 0.7)
+            
+#The process involved in building the same map using QGIS, a GUI-based software platform, and in R, a code-based statistics software, had its advantages and drawbacks when comparing the two softwares used to build my maps. The process involved in building a final map visualization was broken up into three main themes: finding and cleaning the data, importing data and building the map, and finally polishing up the map visualization i.e. legends, scale bar, etc… and exporting it. The map I built projects a choropleth density map of the percent of each countries’ urban population living in slums with added layers of 2020 population spread raster layer estimates and 2035 megacities points estimates for Africa and Asia. The data used derived from a multiple different web resources. My goal was to build a map on a global scale, and found reliable data from GADM (the Database of Global Administrative Areas), a firm that “provides maps and spatial data for all countries and their sub-divisions”. Here I found my the shapefile polygon data for the entire world. The data for the raster maps of Africa and Asia derived from worldpop.org, a company that specializes on human population spatial data, and was downloaded as a .tif file. The megacities points data derived from the United Nations population surveys database as a .xls file on total populations and projections of cities over 300k around the world. Lastly, I came across an article, from Our World in Data’s website, that focuses on spatial data illustrating urban change. The article, “Urbanization” by Hannah Ritchie and Roser, contained lots of options for global urban change data. I decided to download data on the most current survey data, which was in 2014, of the percent of each countries’ urban population is living in slums as a .csv file. I was comfortable with all of my data since it came from reliable resources, albeit having to edit/clean up some parts of the dataframes.
+
+#Building my map in a GUI-based software first before code-based was my initial preference. To see the data visually and play around with its attributes makes the building process easier. It sets up an image to replicate in code-based, which I find more complicated to play around with visually. I used Qgis 3.4.0 as the GUI-based software to build my map. I found using the Layers tab to add data easy as I started off by importing all my data into my Layers panel. I imported the world countries vector layer shapefile to set up as my base polygons. To add on, I imported the cities as a .csv file and set geometry lat and long inputs. Third, I imported in both Africa and Asia raster .tif files. Last, I imported in the share of urban population living in slums as a .csv file attribute table with no geometry. 
+#I came across some challenges when joining the share of urban pop living in slums to my world to the world countries shapefile. They both shared country code columns, although after i projected the map with the join it only showed the polygons (countries) that contained living in slums percentage data. In addition, some country codes used were different yet related to the same city. I added another world countries shapefile to solve this, yet in R I didn’t run into this issue. In R, it managed to read in the joined column without omitting the other data’s geometry. Megacities are cities that have a total population greater than 10 million, therefore I used Querybuilder to filter out all cities that will be greater than 10 million in 2035. I found editing data in R slightly more fluid than using Querybuilder, since I am not familiar with SQL. Although, I found the editing tool in qgis a lot more resourceful when needing to change a few country codes to match when joining data. 
+#The layer properties tab and symbology tool in qgis had its advantage over R. Customizing colors, classifications, and creating the Megacities points as a graduated symbol was far easier than in R. 
+#Polishing up the maps in Qgis and in R did not seem to have an advantage over the other. Adding and editing the legend, scalebar, etc… in Layout view in qgis was visually more appealing since you can see the edits as you’re making them without having to re-run code.
+
+#In the end, I came across some limitations during the process of building my map. The data on the share of urban population living in slums is missing data for good chunk of our world. I have become increasingly aware that a limitation to mapping is missing values in data. The worldpop.org website contained spatial population grid data only for countries in Africa, Asia, and Latin America. I found that projecting Latin America would require me to have to illustrate the whole world. If that were the case, it would have been hard to identify and see the spread of the population density especially as it relates to slums and megacities of our future. In conclusion, I found qgis easier to work with than R, yet the program still needs development. For example, I wanted to build a 3D map in qgis, but was the 3D view plug-in cannot view the map in layout view i.e. add legend and scale-bar. In R, I find its advantage is building an interactive map, in addition to cleaning and converting large datasets. I chose this topic because I am interested in global urban planning and social issues. One of the topics that is becoming increasingly popular is our rapid urbanization rate and the growth and challenges of megacities of the future, such as increasing slum populations.
+
+
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+#install.packages("readbitmap")
+#library(ReadImages)
+#fpath <- system.file("~Desktop/MegacitiesxSlums.pdf", package='imager')
+#QgisMap <- load.image(fpath)
+#plot(QgisMap)
+
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
