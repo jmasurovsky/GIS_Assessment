@@ -1,0 +1,49 @@
+,Country Code,Country or area,City Code,Urban Agglomeration,Note,Latitude,Longitude,2035.0
+19,24,Angola,20049,Luanda,6,-8.8368,13.2343,14.5
+24,32,Argentina,20058,Buenos Aires,9,-34.6051,-58.4004,17.1
+61,50,Bangladesh,20119,Dhaka,24,23.7104,90.4074,31.2
+134,76,Brazil,20272,Rio de Janeiro,,-22.9028,-43.2075,14.8
+138,76,Brazil,20287,São Paulo,,-23.5475,-46.6361,24.5
+204,156,China,20464,Beijing,40,39.9075,116.3972,25.4
+227,156,China,20480,Chengdu,39,30.6667,104.0667,11.2
+231,156,China,20484,Chongqing,38,29.5628,106.5528,20.5
+283,156,China,20517,"Guangzhou, Guangdong",39,23.1255,113.2574,16.7
+405,156,China,20625,"Nanjing, Jiangsu",39,32.0482,118.7898,11.5
+449,156,China,20656,Shanghai,39,31.2222,121.4581,34.3
+461,156,China,20667,Shenzhen,39,22.5415,114.0634,15.2
+489,156,China,20689,Tianjin,39,39.1088,117.1886,16.5
+510,156,China,20712,Wuhan,39,30.5833,114.2667,10.0
+517,156,China,20721,"Xi'an, Shaanxi",39,34.2894,108.9402,10.4
+622,170,Colombia,20837,Bogotá,44,4.6097,-74.0818,12.8
+662,180,Democratic Republic of the Congo,20853,Kinshasa,,-4.3276,15.3136,26.7
+685,818,Egypt,22812,Al-Qahirah (Cairo),55,30.0392,31.2394,28.5
+715,250,France,20985,Paris,,48.8534,2.3488,12.1
+764,356,India,21152,Ahmadabad,,23.0333,72.6167,11.3
+780,356,India,21176,Bangalore,,12.9719,77.5937,18.1
+801,356,India,21321,Chennai (Madras),,13.0531,80.2488,15.4
+808,356,India,21228,Delhi,60,28.6667,77.2167,43.4
+835,356,India,21275,Hyderabad,,17.3753,78.4744,14.2
+863,356,India,21211,Kolkata (Calcutta),,22.5335,88.3560,19.6
+882,356,India,21206,Mumbai (Bombay),,19.0740,72.8808,27.3
+924,356,India,21412,Surat,,21.1667,72.8333,10.8
+955,360,Indonesia,21454,Jakarta,63,-6.2118,106.8416,13.7
+1000,364,Iran (Islamic Republic of),21523,Tehran,,35.6944,51.4215,10.7
+1008,368,Iraq,21529,Baghdad,,33.3406,44.4009,10.8
+1067,392,Japan,206459,Kinki M.M.A. (Osaka),69,34.6758,135.5538,18.4
+1088,392,Japan,21671,Tokyo,70,35.6895,139.6917,36.0
+1133,458,Malaysia,206411,Kuala Lumpur,73,3.1412,101.6865,10.5
+1147,484,Mexico,21853,Ciudad de México (Mexico City),74,19.4273,-99.1419,25.4
+1260,566,Nigeria,22007,Lagos,87,6.4531,3.3958,24.4
+1293,586,Pakistan,22044,Karachi,,24.9056,67.0822,23.1
+1295,586,Pakistan,22046,Lahore,,31.5497,74.3436,19.1
+1320,604,Peru,22078,Lima,94,-12.0432,-77.0282,13.0
+1348,608,Philippines,22109,Manila,95,14.6042,120.9822,18.7
+1390,410,Republic of Korea,21758,Seoul,102,37.5683,126.9778,10.3
+1427,643,Russian Federation,22299,Moskva (Moscow),,55.7550,37.6218,12.8
+1562,764,Thailand,22617,Krung Thep (Bangkok),,13.7220,100.5252,12.7
+1600,792,Turkey,22691,Istanbul,,41.0138,28.9497,18.0
+1649,826,United Kingdom,22860,London,125,51.5085,-0.1257,10.6
+1665,834,United Republic of Tanzania,22894,Dar es Salaam,,-6.8235,39.2695,13.4
+1742,840,United States of America,23052,Los Angeles-Long Beach-Santa Ana,,34.0317,-118.2417,13.8
+1758,840,United States of America,23083,New York-Newark,,40.7170,-74.0037,20.8
+1845,704,Viet Nam,22458,Thành Pho Ho Chí Minh (Ho Chi Minh City),,10.7500,106.6667,12.2
